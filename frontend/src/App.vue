@@ -4,13 +4,9 @@ import Master from './components/layouts/Master.vue';
 </script>
 
 <template>
-  <header>
 
-    <div class="wrapper">
-      <Master>
-        <RouterView />
-      </Master>
-    </div>
-  </header>
+  <div class="wrapper">
+    <RouterView />
+  </div>
 
 </template>

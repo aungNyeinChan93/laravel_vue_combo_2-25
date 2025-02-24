@@ -1,11 +1,18 @@
+<script setup>
+import { RouterLink, RouterView } from 'vue-router';
+</script>
+
 <template>
     <section>
+
         <nav>
-            navbar
+            <RouterLink to="/"> Home </RouterLink>
+            <RouterLink to="/about"> About </RouterLink>
+            <RouterLink :to="{ name: 'login' }"> Login </RouterLink>
         </nav>
 
         <main>
-            <slot />
+            <RouterView />
         </main>
     </section>
 </template>
