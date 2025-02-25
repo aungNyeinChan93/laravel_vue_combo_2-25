@@ -6,6 +6,9 @@ import LoginView from "@/views/auth/LoginView.vue";
 import Admin from "@/components/layouts/Admin.vue";
 import NotFound from "@/views/admin/NotFound.vue";
 import RegisterView from "@/views/auth/RegisterView.vue";
+import ProfileView from "@/views/profile/ProfileView.vue";
+import MyImage from "@/views/MyImage.vue";
+import UploadImageView from "@/views/UploadImageView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,6 +45,21 @@ const router = createRouter({
           path: "/about",
           name: "about",
           component: () => import("@/views/AboutView.vue"),
+        },
+        {
+          path: "/profile",
+          name: "profile",
+          component: ProfileView,
+        },
+        {
+          path: "/myImage",
+          name: "my_image",
+          component: MyImage,
+        },
+        {
+          path: "/uploadImage",
+          name: "uploadImage",
+          component: UploadImageView,
         },
       ],
     },

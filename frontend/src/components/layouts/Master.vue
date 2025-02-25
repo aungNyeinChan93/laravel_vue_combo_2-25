@@ -1,6 +1,7 @@
 <template>
 
     <div class="min-h-full">
+
         <Disclosure as="nav" class="bg-gray-800" v-slot="{ open }">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="flex h-16 items-center justify-between">
@@ -19,7 +20,7 @@
                                     </RouterLink>
                                 </div>
 
-                                <div>
+                                <div v-show="true">
                                     <RouterLink v-for="item in auth" :key="item.name" :to="item.to"
                                         :class="[$route.name === item.to.name ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium me-4']"
                                         :aria-current="$route.name == item.to.name ? 'page' : undefined">{{ item.name }}
@@ -57,10 +58,15 @@
                                     <MenuItems
                                         class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 focus:outline-hidden">
                                         <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
-                                        <a :href="item.href"
-                                            :class="[active ? 'bg-gray-100 outline-hidden' : '', 'block px-4 py-2 text-sm text-gray-700']">{{
-                                                item.name }}</a>
+                                        <RouterLink :to="item.to"
+                                            :class="[active ? 'bg-gray-100 outline-hidden' : '', 'block px-4 py-2 text-sm text-gray-700']">
+                                            {{
+                                                item.name }}</RouterLink>
                                         </MenuItem>
+                                        <button
+                                            :class="[active ? 'bg-gray-100 outline-hidden' : '', 'block px-4 py-2 text-sm text-gray-700']"
+                                            @click="logout">Logout
+                                        </button>
                                     </MenuItems>
                                 </transition>
                             </Menu>
@@ -107,9 +113,9 @@
                         </button>
                     </div>
                     <div class="mt-3 space-y-1 px-2">
-                        <DisclosureButton v-for="item in userNavigation" :key="item.name" as="a" :href="item.href"
+                        <RouterLink v-for="item in userNavigation" :key="item.name" as="a" :to="item.to"
                             class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
-                            {{ item.name }}</DisclosureButton>
+                            {{ item.name }}</RouterLink>
                     </div>
                 </div>
             </DisclosurePanel>
@@ -117,14 +123,16 @@
 
         <header class="bg-white shadow-sm">
             <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
+                <h1 class="text-2xl font-bold tracking-tight text-gray-600">{{ $route.name.toUpperCase() }}</h1>
             </div>
         </header>
+
         <main>
             <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                 <RouterView />
             </div>
         </main>
+
     </div>
 </template>
 
@@ -142,6 +150,8 @@ const user = {
 const navigation = [
     { name: 'Home', to: { name: 'home' } },
     { name: 'About', to: { name: 'about' } },
+    { name: 'Image', to: { name: 'my_image' } },
+    { name: 'Upload-Image', to: { name: 'uploadImage' } },
 ]
 
 const auth = [
@@ -150,8 +160,13 @@ const auth = [
 ]
 
 const userNavigation = [
-    { name: 'Your Profile', href: '#' },
-    { name: 'Settings', href: '#' },
-    { name: 'Sign out', href: '#' },
+    { name: 'Your Profile', to: { name: 'profile' } },
+    { name: 'Your Profile', to: { name: 'profile' } },
+    { name: 'Your Profile', to: { name: 'profile' } },
+
 ]
+
+const logout = () => {
+    alert('logout')
+}
 </script>
