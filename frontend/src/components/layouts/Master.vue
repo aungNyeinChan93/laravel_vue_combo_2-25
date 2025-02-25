@@ -152,6 +152,7 @@ const navigation = [
     { name: 'About', to: { name: 'about' } },
     { name: 'Image', to: { name: 'my_image' } },
     { name: 'Upload-Image', to: { name: 'uploadImage' } },
+    { name: 'Products', to: { name: 'products' } },
 ]
 
 const auth = [

@@ -9,6 +9,7 @@ import RegisterView from "@/views/auth/RegisterView.vue";
 import ProfileView from "@/views/profile/ProfileView.vue";
 import MyImage from "@/views/MyImage.vue";
 import UploadImageView from "@/views/UploadImageView.vue";
+import ProductView from "@/views/ProductView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -60,6 +61,11 @@ const router = createRouter({
           path: "/uploadImage",
           name: "uploadImage",
           component: UploadImageView,
+        },
+        {
+          path: "/products",
+          name: "products",
+          component: ProductView,
         },
       ],
     },

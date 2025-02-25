@@ -1,3 +1,24 @@
+<script setup>
+import { reactive, ref } from 'vue';
+import axiosClient from '@/axios'
+import router from '@/router';
+
+const form = reactive({
+    email: '',
+    password: ''
+});
+
+const loginToken = ref('');
+
+const login = async () => {
+    await axiosClient.get('/sanctum/csrf-cookie'); //csrf token
+    const { data: user } = await axiosClient.post('api/login', form);
+    loginToken.value = user.data.loginToken;
+    router.push({ name: 'home' });
+}
+
+</script>
+
 <template>
     <div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 mt-[100px]">
         <div class="mx-auto max-w-lg text-center">
@@ -9,13 +30,13 @@
             </p>
         </div>
 
-        <form action="#" class="mx-auto mt-8 mb-0 max-w-md space-y-4">
+        <form @submit.prevent="login" class="mx-auto mt-8 mb-0 max-w-md space-y-4">
             <div>
                 <label for="email" class="sr-only">Email</label>
 
                 <div class="relative">
                     <input type="email" class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-xs"
-                        placeholder="Enter email" />
+                        v-model="form.email" placeholder="Enter email" />
                 </div>
             </div>
 
@@ -23,7 +44,7 @@
                 <label for="password" class="sr-only">Password</label>
                 <div class="relative">
                     <input type="password" class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-xs"
-                        placeholder="Enter password" />
+                        v-model="form.password" placeholder="Enter password" />
                 </div>
             </div>
 

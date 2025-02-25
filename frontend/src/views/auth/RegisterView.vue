@@ -1,8 +1,30 @@
 <script setup>
+import axiosClient from '@/axios';
+import { reactive, ref } from 'vue';
 import { RouterLink } from 'vue-router';
+import { useRouter } from 'vue-router';
+
+
+const router = useRouter();
+const registerToken = ref('');
+const form = reactive({
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: ''
+})
+
+const submit = async () => {
+    await axiosClient.get('/sanctum/csrf-cookie');
+    const { data: user } = await axiosClient.post('api/register', form);
+    registerToken.value = user.data.registerToken;
+    router.push({ name: 'home' });
+}
+
 </script>
 
 <template>
+    {{ registerToken }}
     <section class="bg-gray-100">
         <div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 gap-x-16 gap-y-8 lg:grid-cols-5">
@@ -22,47 +44,42 @@ import { RouterLink } from 'vue-router';
                 </div>
 
                 <div class="rounded-lg bg-white p-8 shadow-lg lg:col-span-3 lg:p-12">
-                    <form action="#" class="space-y-4">
+                    <form @submit.prevent="submit" class="space-y-4">
                         <div>
                             <label class="sr-only" for="name">Name</label>
                             <input class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="Name" type="text"
-                                id="name" />
+                                v-model="form.name" id="name" />
                         </div>
 
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <div>
                                 <label class="sr-only" for="email">Email</label>
                                 <input class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="Email address"
-                                    type="email" id="email" />
-                            </div>
-
-                            <div>
-                                <label class="sr-only" for="phone">Phone</label>
-                                <input class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="Phone Number"
-                                    type="tel" id="phone" />
+                                    v-model="form.email" type="email" id="email" />
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <div>
                                 <label class="sr-only" for="password">Password</label>
-                                <input class="w-full rounded-lg border-gray-200 p-3 text-sm"
+                                <input class="w-full rounded-lg border-gray-200 p-3 text-sm" v-model="form.password"
                                     placeholder="Enter Password" type="password" id="password" />
                             </div>
 
                             <div>
                                 <label class="sr-only" for="passwordConfirmation">Confirm Password</label>
                                 <input class="w-full rounded-lg border-gray-200 p-3 text-sm"
-                                    placeholder="Confirm Password" type="password" id="passwordConfirmation" />
+                                    v-model="form.password_confirmation" placeholder="Confirm Password" type="password"
+                                    id="passwordConfirmation" />
                             </div>
                         </div>
 
-                        <div>
+                        <!-- <div>
                             <label class="sr-only" for="address">Address</label>
 
                             <textarea class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="Address"
                                 rows="8" id="address"></textarea>
-                        </div>
+                        </div> -->
 
                         <div class="mt-4">
                             <button type="submit"
