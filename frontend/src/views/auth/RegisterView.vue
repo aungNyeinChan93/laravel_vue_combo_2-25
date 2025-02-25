@@ -1,7 +1,12 @@
+<script setup>
+import { RouterLink } from 'vue-router';
+</script>
+
 <template>
     <section class="bg-gray-100">
         <div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 gap-x-16 gap-y-8 lg:grid-cols-5">
+
                 <div class="lg:col-span-2 lg:py-12">
                     <p class="max-w-xl text-lg">
                         At the same time, the fact that we are wholly owned and totally independent from
@@ -38,50 +43,36 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 gap-4 text-center sm:grid-cols-3">
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <div>
-                                <label for="Option1"
-                                    class="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white"
-                                    tabindex="0">
-                                    <input class="sr-only" id="Option1" type="radio" tabindex="-1" name="option" />
-
-                                    <span class="text-sm"> Option 1 </span>
-                                </label>
+                                <label class="sr-only" for="password">Password</label>
+                                <input class="w-full rounded-lg border-gray-200 p-3 text-sm"
+                                    placeholder="Enter Password" type="password" id="password" />
                             </div>
 
                             <div>
-                                <label for="Option2"
-                                    class="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white"
-                                    tabindex="0">
-                                    <input class="sr-only" id="Option2" type="radio" tabindex="-1" name="option" />
-
-                                    <span class="text-sm"> Option 2 </span>
-                                </label>
-                            </div>
-
-                            <div>
-                                <label for="Option3"
-                                    class="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white"
-                                    tabindex="0">
-                                    <input class="sr-only" id="Option3" type="radio" tabindex="-1" name="option" />
-
-                                    <span class="text-sm"> Option 3 </span>
-                                </label>
+                                <label class="sr-only" for="passwordConfirmation">Confirm Password</label>
+                                <input class="w-full rounded-lg border-gray-200 p-3 text-sm"
+                                    placeholder="Confirm Password" type="password" id="passwordConfirmation" />
                             </div>
                         </div>
 
                         <div>
-                            <label class="sr-only" for="message">Message</label>
+                            <label class="sr-only" for="address">Address</label>
 
-                            <textarea class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="Message"
-                                rows="8" id="message"></textarea>
+                            <textarea class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="Address"
+                                rows="8" id="address"></textarea>
                         </div>
 
                         <div class="mt-4">
                             <button type="submit"
                                 class="inline-block w-full rounded-lg bg-black px-5 py-3 font-medium text-white sm:w-auto">
-                                Send Enquiry
+                                Register
                             </button>
+                            <p class="p-2 mt-4">You have already account ? <RouterLink :to="{ name: 'login' }"
+                                    class="text-blue-500">Login
+                                    Here</RouterLink>
+                            </p>
                         </div>
                     </form>
                 </div>
