@@ -19,7 +19,8 @@ class CustomerFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->email(),
-            'type' => fake()->randomElement(['normal', 'silver', 'gold'])
+            'type' => fake()->randomElement(['normal', 'silver', 'gold']),
+            'image' => 'https://dummyimage.com/800x600/000/fff&text=' . fake()->randomLetter(),
         ];
     }
 }

@@ -13,14 +13,20 @@
                         </div>
                         <div class="hidden md:block">
                             <div class="ml-10 flex justify-between items-baseline w-[300px] md:w-[1000px]">
-                                <div>
+                                <div v-if="authUser.loginToken && authUser.registerToken">
                                     <RouterLink v-for="item in navigation" :key="item.name" :to="item.to"
                                         :class="[$route.name === item.to.name ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium me-4']"
                                         :aria-current="$route.name == item.to.name ? 'page' : undefined">{{ item.name }}
                                     </RouterLink>
                                 </div>
+                                <div v-else>
+                                    <RouterLink :to="navigation[0].to"
+                                        :class="[true ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium me-4']">
+                                        {{ navigation[0].name }}
+                                    </RouterLink>
+                                </div>
 
-                                <div v-show="true">
+                                <div v-show="!authUser.registerToken || !authUser.loginToken">
                                     <RouterLink v-for="item in auth" :key="item.name" :to="item.to"
                                         :class="[$route.name === item.to.name ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium me-4']"
                                         :aria-current="$route.name == item.to.name ? 'page' : undefined">{{ item.name }}
@@ -63,11 +69,13 @@
                                             {{
                                                 item.name }}</RouterLink>
                                         </MenuItem>
-                                        <form @submit.prevent="logout">
-                                            <button type="submit"
-                                                :class="[active ? 'bg-gray-100 outline-hidden' : '', 'block px-4 py-2 text-sm text-gray-700']">Logout
-                                            </button>
-                                        </form>
+                                        <div v-if="authUser.loginToken">
+                                            <form @submit.prevent="logout">
+                                                <button type="submit"
+                                                    :class="[active ? 'bg-gray-100 outline-hidden' : '', 'block px-4 py-2 text-sm text-gray-700']">Logout
+                                                </button>
+                                            </form>
+                                        </div>
                                     </MenuItems>
                                 </transition>
                             </Menu>
@@ -88,14 +96,25 @@
 
             <DisclosurePanel class="md:hidden">
                 <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-                    <RouterLink v-for="item in navigation" :key="item.name" as="a" :to="item.to"
-                        :class="[$route.name === item.to.name ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block rounded-md px-3 py-2 text-base font-medium']"
-                        :aria-current="$route.name == item.to.name ? 'page' : undefined">{{ item.name }}
-                    </RouterLink>
-                    <RouterLink v-for="item in auth" :key="item.name" as="a" :to="item.to"
-                        :class="[$route.name === item.to.name ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block rounded-md px-3 py-2 text-base font-medium']"
-                        :aria-current="$route.name == item.to.name ? 'page' : undefined">{{ item.name }}
-                    </RouterLink>
+                    <div v-if="authUser.loginToken && authUser.registerToken">
+                        <RouterLink v-for="item in navigation" :key="item.name" as="a" :to="item.to"
+                            :class="[$route.name === item.to.name ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block rounded-md px-3 py-2 text-base font-medium']"
+                            :aria-current="$route.name == item.to.name ? 'page' : undefined">{{ item.name }}
+                        </RouterLink>
+                    </div>
+                    <div v-else>
+                        <RouterLink :to="navigation[0].to"
+                            :class="[true ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium me-4']">
+                            {{ navigation[0].name }}
+                        </RouterLink>
+                    </div>
+
+                    <div v-show="!authUser.loginToken || !authUser.registerToken">
+                        <RouterLink v-for="item in auth" :key="item.name" as="a" :to="item.to"
+                            :class="[$route.name === item.to.name ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block rounded-md px-3 py-2 text-base font-medium']"
+                            :aria-current="$route.name == item.to.name ? 'page' : undefined">{{ item.name }}
+                        </RouterLink>
+                    </div>
                 </div>
                 <div class="border-t border-gray-700 pt-4 pb-3">
                     <div class="flex items-center px-5">
@@ -117,6 +136,13 @@
                         <RouterLink v-for="item in userNavigation" :key="item.name" as="a" :to="item.to"
                             class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
                             {{ item.name }}</RouterLink>
+                        <div v-if="authUser.loginToken">
+                            <form @submit.prevent="logout">
+                                <button type="submit"
+                                    :class="[true ? 'text-red-100 outline-hidden' : '', 'block px-4 py-2 text-sm text-gray-700']">Logout
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </DisclosurePanel>
@@ -125,7 +151,6 @@
         <header class="bg-white shadow-sm">
             <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                 <h1 class="text-2xl font-bold tracking-tight text-gray-600">{{ $route.name.toUpperCase() }}</h1>
-                {{ authUser }}
             </div>
         </header>
 
@@ -161,6 +186,7 @@ const navigation = [
     { name: 'Image', to: { name: 'my_image' } },
     { name: 'Upload-Image', to: { name: 'uploadImage' } },
     { name: 'Products', to: { name: 'products' } },
+    { name: "Customers", to: { name: 'customers' } }
 ]
 
 const auth = [
@@ -172,18 +198,17 @@ const userNavigation = [
     { name: 'Your Profile', to: { name: 'profile' } },
     { name: 'Your Profile', to: { name: 'profile' } },
     { name: 'Your Profile', to: { name: 'profile' } },
-
 ]
 
 const logout = async () => {
     await axiosClient.get('/sanctum/csrf-cookie');
     await axiosClient.post('/api/logout', {}, {
         headers: {
-            'Authorization': `Bearer ${authUser.value.token}`,
+            'Authorization': `Bearer ${authUser.value.loginToken}`,
             'Content-Type': 'application/json'
         }
     });
-    authUser.value.token = ''
+    authUser.value.loginToken = ''
 }
 
 

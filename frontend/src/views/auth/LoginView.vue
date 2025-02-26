@@ -10,11 +10,17 @@ const form = reactive({
     password: ''
 });
 
-
 const login = async () => {
     await axiosClient.get('/sanctum/csrf-cookie'); //csrf token
-    const { data: user } = await axiosClient.post('api/login', form);
-    authUserStore.user.token = user.data.loginToken;
+    const { data: user } = await axiosClient.post('api/login', form, {
+        headers: {
+            Authorization: `Bearer ${authUserStore.user.registerToken}`,
+            "Content-Type": 'application/json'
+        }
+    });
+    authUserStore.user.loginToken = user.data.loginToken;
+    authUserStore.user.name = user.data.name;
+    authUserStore.user.email = user.data.email;
     router.push({ name: 'home' });
 }
 
@@ -22,6 +28,7 @@ const login = async () => {
 
 <template>
     <div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 mt-[100px]">
+        {{ authUserStore.user.token }}
         <div class="mx-auto max-w-lg text-center">
             <h1 class="text-2xl font-bold sm:text-3xl">Get started today!</h1>
 

@@ -18,10 +18,10 @@ const form = reactive({
 const submit = async () => {
     await axiosClient.get('/sanctum/csrf-cookie');
     const { data: user } = await axiosClient.post('api/register', form);
-    authUserStore.user.token = user.data.registerToken;
+    authUserStore.user.registerToken = user.data.registerToken;
     authUserStore.user.name = user.data.name;
     authUserStore.user.email = user.data.email;
-    router.push({ name: 'home' });
+    router.push({ name: 'login' });
 }
 
 </script>

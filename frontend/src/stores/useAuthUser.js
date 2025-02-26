@@ -6,8 +6,9 @@ export const useAuthUserStore = defineStore(
   () => {
     const user = reactive({
       name: "default name",
-      email: "",
-      token: "",
+      email: "default email",
+      registerToken: "",
+      loginToken: "",
       image: "",
     });
 
