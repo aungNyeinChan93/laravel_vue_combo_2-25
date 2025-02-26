@@ -1,13 +1,11 @@
 <script setup>
-import axiosClient from '@/axios';
 import { reactive, ref } from 'vue';
 import { RouterLink } from 'vue-router';
-import { useRouter } from 'vue-router';
 import { useAuthUserStore } from '@/stores/useAuthUser';
 
 
+
 const authUserStore = useAuthUserStore();
-const router = useRouter();
 const form = reactive({
     name: '',
     email: '',
@@ -15,13 +13,17 @@ const form = reactive({
     password_confirmation: ''
 })
 
-const submit = async () => {
-    await axiosClient.get('/sanctum/csrf-cookie');
-    const { data: user } = await axiosClient.post('api/register', form);
-    authUserStore.user.registerToken = user.data.registerToken;
-    authUserStore.user.name = user.data.name;
-    authUserStore.user.email = user.data.email;
-    router.push({ name: 'login' });
+// const submit = async () => {
+//     await axiosClient.get('/sanctum/csrf-cookie');
+//     const { data: user } = await axiosClient.post('api/register', form);
+//     authUserStore.user.registerToken = user.data.registerToken;
+//     authUserStore.user.name = user.data.name;
+//     authUserStore.user.email = user.data.email;
+//     router.push({ name: 'login' });
+// }
+
+const submit = () => {
+    authUserStore.userRegister('/api/register', form)
 }
 
 </script>

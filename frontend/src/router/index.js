@@ -10,6 +10,7 @@ import ProfileView from "@/views/profile/ProfileView.vue";
 import MyImage from "@/views/MyImage.vue";
 import UploadImageView from "@/views/UploadImageView.vue";
 import ProductView from "@/views/ProductView.vue";
+import { useAuthUserStore } from "@/stores/useAuthUser";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -73,6 +74,16 @@ const router = createRouter({
           component: () => import("@/views/customers/CustomerView.vue"),
         },
       ],
+      beforeEnter: async (to, from, next) => {
+        try {
+          const authUserStore = useAuthUserStore();
+          await authUserStore.fetchUserInfo();
+          next();
+        } catch (error) {
+          console.log(error);
+          next({ name: "login" });
+        }
+      },
     },
 
     // adminLayout

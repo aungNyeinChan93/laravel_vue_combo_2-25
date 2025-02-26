@@ -166,7 +166,6 @@
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
-import axiosClient from '@/axios';
 import { useAuthUserStore } from '@/stores/useAuthUser';
 import { storeToRefs } from 'pinia';
 
@@ -201,15 +200,19 @@ const userNavigation = [
 ]
 
 const logout = async () => {
-    await axiosClient.get('/sanctum/csrf-cookie');
-    await axiosClient.post('/api/logout', {}, {
-        headers: {
-            'Authorization': `Bearer ${authUser.value.loginToken}`,
-            'Content-Type': 'application/json'
-        }
-    });
-    authUser.value.loginToken = ''
+    await authUserStore.userLogout('/api/logout')
 }
+
+// const logout = async () => {
+//     await axiosClient.get('/sanctum/csrf-cookie');
+//     await axiosClient.post('/api/logout', {}, {
+//         headers: {
+//             'Authorization': `Bearer ${authUser.value.loginToken}`,
+//             'Content-Type': 'application/json'
+//         }
+//     });
+//     authUser.value.loginToken = ''
+// }
 
 
 </script>

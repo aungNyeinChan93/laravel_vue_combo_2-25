@@ -1,7 +1,5 @@
 <script setup>
 import { reactive, ref } from 'vue';
-import axiosClient from '@/axios'
-import router from '@/router';
 import { useAuthUserStore } from '@/stores/useAuthUser';
 
 const authUserStore = useAuthUserStore();
@@ -10,18 +8,22 @@ const form = reactive({
     password: ''
 });
 
-const login = async () => {
-    await axiosClient.get('/sanctum/csrf-cookie'); //csrf token
-    const { data: user } = await axiosClient.post('api/login', form, {
-        headers: {
-            Authorization: `Bearer ${authUserStore.user.registerToken}`,
-            "Content-Type": 'application/json'
-        }
-    });
-    authUserStore.user.loginToken = user.data.loginToken;
-    authUserStore.user.name = user.data.name;
-    authUserStore.user.email = user.data.email;
-    router.push({ name: 'home' });
+// const login = async () => {
+//     await axiosClient.get('/sanctum/csrf-cookie'); //csrf token
+//     const { data: user } = await axiosClient.post('api/login', form, {
+//         headers: {
+//             Authorization: `Bearer ${authUserStore.user.registerToken}`,
+//             "Content-Type": 'application/json'
+//         }
+//     });
+//     authUserStore.user.loginToken = user.data.loginToken;
+//     authUserStore.user.name = user.data.name;
+//     authUserStore.user.email = user.data.email;
+//     router.push({ name: 'home' });
+// }
+
+const login = () => {
+    authUserStore.userLogin('api/login', form, authUserStore.user.registerToken)
 }
 
 </script>
