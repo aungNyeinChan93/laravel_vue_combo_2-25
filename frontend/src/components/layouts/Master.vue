@@ -57,16 +57,17 @@
                                     leave-to-class="transform opacity-0 scale-95">
                                     <MenuItems
                                         class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 focus:outline-hidden">
-                                        <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
+                                        <MenuItem v-for="item in userNavigation" :key="item.name">
                                         <RouterLink :to="item.to"
                                             :class="[active ? 'bg-gray-100 outline-hidden' : '', 'block px-4 py-2 text-sm text-gray-700']">
                                             {{
                                                 item.name }}</RouterLink>
                                         </MenuItem>
-                                        <button
-                                            :class="[active ? 'bg-gray-100 outline-hidden' : '', 'block px-4 py-2 text-sm text-gray-700']"
-                                            @click="logout">Logout
-                                        </button>
+                                        <form @submit.prevent="logout">
+                                            <button type="submit"
+                                                :class="[active ? 'bg-gray-100 outline-hidden' : '', 'block px-4 py-2 text-sm text-gray-700']">Logout
+                                            </button>
+                                        </form>
                                     </MenuItems>
                                 </transition>
                             </Menu>
@@ -102,8 +103,8 @@
                             <img class="size-10 rounded-full" :src="user.imageUrl" alt="" />
                         </div>
                         <div class="ml-3">
-                            <div class="text-base/5 font-medium text-white">{{ user.name }}</div>
-                            <div class="text-sm font-medium text-gray-400">{{ user.email }}</div>
+                            <div class="text-base/5 font-medium text-white">{{ authUser.name }}</div>
+                            <div class="text-sm font-medium text-gray-400">{{ authUser.email }}</div>
                         </div>
                         <button type="button"
                             class="relative ml-auto shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
@@ -124,6 +125,7 @@
         <header class="bg-white shadow-sm">
             <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                 <h1 class="text-2xl font-bold tracking-tight text-gray-600">{{ $route.name.toUpperCase() }}</h1>
+                {{ authUser }}
             </div>
         </header>
 
@@ -139,10 +141,16 @@
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+import axiosClient from '@/axios';
+import { useAuthUserStore } from '@/stores/useAuthUser';
+import { storeToRefs } from 'pinia';
+
+const authUserStore = useAuthUserStore();
+const { user: authUser, getUser } = storeToRefs(authUserStore);
 
 const user = {
-    name: 'Aung',
-    email: 'tom@example.com',
+    name: getUser?.value.name,
+    email: getUser?.value.email,
     imageUrl:
         'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
@@ -167,7 +175,16 @@ const userNavigation = [
 
 ]
 
-const logout = () => {
-    alert('logout')
+const logout = async () => {
+    await axiosClient.get('/sanctum/csrf-cookie');
+    await axiosClient.post('/api/logout', {}, {
+        headers: {
+            'Authorization': `Bearer ${authUser.value.token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    authUser.value.token = ''
 }
+
+
 </script>

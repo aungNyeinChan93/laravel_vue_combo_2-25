@@ -2,18 +2,19 @@
 import { reactive, ref } from 'vue';
 import axiosClient from '@/axios'
 import router from '@/router';
+import { useAuthUserStore } from '@/stores/useAuthUser';
 
+const authUserStore = useAuthUserStore();
 const form = reactive({
     email: '',
     password: ''
 });
 
-const loginToken = ref('');
 
 const login = async () => {
     await axiosClient.get('/sanctum/csrf-cookie'); //csrf token
     const { data: user } = await axiosClient.post('api/login', form);
-    loginToken.value = user.data.loginToken;
+    authUserStore.user.token = user.data.loginToken;
     router.push({ name: 'home' });
 }
 

@@ -49,4 +49,13 @@ class AuthController extends Controller
             "data" => new LoginResource($user)
         ]);
     }
+
+    // logout
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+        return response()->json([
+            'message' => 'success',
+        ]);
+    }
 }
