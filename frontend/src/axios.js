@@ -9,17 +9,17 @@ const axiosClient = axios.create({
   withXSRFToken: true,
 });
 
-// error handling
-axiosClient.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    if (error.response && error.response.message === 404) {
-      router.push({ name: "login" });
-    }
-    throw error;
-  }
-);
+// response error handling
+// axiosClient.interceptors.response.use(
+//   (response) => {
+//     return response;
+//   },
+//   (error) => {
+//     if (error.response && error.response.message === 404) {
+//       router.push({ name: "login" });
+//     }
+//     throw error;
+//   }
+// );
 
 export default axiosClient;

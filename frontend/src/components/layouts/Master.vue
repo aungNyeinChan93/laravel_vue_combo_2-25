@@ -203,16 +203,4 @@ const logout = async () => {
     await authUserStore.userLogout('/api/logout')
 }
 
-// const logout = async () => {
-//     await axiosClient.get('/sanctum/csrf-cookie');
-//     await axiosClient.post('/api/logout', {}, {
-//         headers: {
-//             'Authorization': `Bearer ${authUser.value.loginToken}`,
-//             'Content-Type': 'application/json'
-//         }
-//     });
-//     authUser.value.loginToken = ''
-// }
-
-
 </script>

@@ -2,10 +2,10 @@
 import { reactive, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import { useAuthUserStore } from '@/stores/useAuthUser';
-
-
+import { storeToRefs } from 'pinia';
 
 const authUserStore = useAuthUserStore();
+
 const form = reactive({
     name: '',
     email: '',
@@ -13,14 +13,7 @@ const form = reactive({
     password_confirmation: ''
 })
 
-// const submit = async () => {
-//     await axiosClient.get('/sanctum/csrf-cookie');
-//     const { data: user } = await axiosClient.post('api/register', form);
-//     authUserStore.user.registerToken = user.data.registerToken;
-//     authUserStore.user.name = user.data.name;
-//     authUserStore.user.email = user.data.email;
-//     router.push({ name: 'login' });
-// }
+const { errors } = storeToRefs(authUserStore)
 
 const submit = () => {
     authUserStore.userRegister('/api/register', form)
@@ -32,7 +25,6 @@ const submit = () => {
     <section class="bg-gray-100">
         <div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 gap-x-16 gap-y-8 lg:grid-cols-5">
-
                 <div class="lg:col-span-2 lg:py-12">
                     <p class="max-w-xl text-lg">
                         At the same time, the fact that we are wholly owned and totally independent from
@@ -53,14 +45,15 @@ const submit = () => {
                             <label class="sr-only" for="name">Name</label>
                             <input class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="Name" type="text"
                                 v-model="form.name" id="name" />
+                            <small v-if="errors" class="text-sm text-red-600">{{ errors?.name }}</small>
                         </div>
 
-                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <div>
-                                <label class="sr-only" for="email">Email</label>
-                                <input class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="Email address"
-                                    v-model="form.email" type="email" id="email" />
-                            </div>
+                        <div>
+                            <label class="sr-only" for="email">Email</label>
+                            <input class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="Email address"
+                                v-model="form.email" type="email" id="email" />
+                            <small v-if="errors" class="text-sm text-red-600">{{ errors?.email }}</small>
+
                         </div>
 
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -68,6 +61,8 @@ const submit = () => {
                                 <label class="sr-only" for="password">Password</label>
                                 <input class="w-full rounded-lg border-gray-200 p-3 text-sm" v-model="form.password"
                                     placeholder="Enter Password" type="password" id="password" />
+                                <small v-if="errors" class="text-sm text-red-600">{{ errors?.password }}</small>
+
                             </div>
 
                             <div>
@@ -77,13 +72,6 @@ const submit = () => {
                                     id="passwordConfirmation" />
                             </div>
                         </div>
-
-                        <!-- <div>
-                            <label class="sr-only" for="address">Address</label>
-
-                            <textarea class="w-full rounded-lg border-gray-200 p-3 text-sm" placeholder="Address"
-                                rows="8" id="address"></textarea>
-                        </div> -->
 
                         <div class="mt-4">
                             <button type="submit"

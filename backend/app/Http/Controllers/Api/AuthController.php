@@ -8,19 +8,28 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\RegisterResource;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
     //register
     public function register(Request $request)
     {
-        $fields = $request->validate([
+
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'email|unique:users,email',
             "password" => 'required|confirmed|max:255',
         ]);
 
-        $user = User::create($fields);
+        if ($validator->fails()) {
+            $formattedErrors = collect($validator->errors())
+                ->map(fn($messages) => $messages[0])
+                ->toArray();
+            return response()->json(['errors' => $formattedErrors], 422);
+        }
+
+        $user = User::create($validator->validated());
 
         return response()->json([
             'message' => 'success',

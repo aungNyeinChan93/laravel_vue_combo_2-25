@@ -31,6 +31,11 @@ const router = createRouter({
           component: RegisterView,
         },
       ],
+      beforeEnter: (to, from, next) => {
+        const authUserStore = useAuthUserStore();
+        authUserStore.errors = "";
+        next();
+      },
     },
 
     // MasterLayout
@@ -80,7 +85,7 @@ const router = createRouter({
           await authUserStore.fetchUserInfo();
           next();
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           next({ name: "login" });
         }
       },
